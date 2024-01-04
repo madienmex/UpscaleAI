@@ -21,4 +21,4 @@ def upscale_image(input_path, output_path, scale_factor=2.0, interpolation=cv2.I
     print(f"Image upscaled and saved as {output_path}")
 
 # Example usage
-upscale_image("vangogh.png", "upscaled_vangoghx4.png", scale_factor=4.0)
+upscale_image("img/vangogh.png", "img/upscaled_vangoghx4.png", scale_factor=4.0)
