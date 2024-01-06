@@ -1,24 +1,38 @@
-import cv2  
+import tkinter as tk
+import upscale as up
+import tools as t
+from tkinterdnd2 import DND_FILES, TkinterDnD
 
-def upscale_image(input_path, output_path, scale_factor=2.0, interpolation=cv2.INTER_CUBIC):
-    # Read the original image
-    image = cv2.imread(input_path)
-    if image is None:
-        print("Error: Unable to load image.")
-        return
+def drop(event):
+    files = event.data.split('} {')
+    print(f"Dropped files: {files}")
+    
+    # Loop through each file in the list
+    for file in files:
+        # Your code to process each file goes here
+        file = file.replace("{", "").replace("}", "")
+        print(f"Processing {file}")
+        # upscale each image
+        newfilename = t.rename_file_with_new_path(file_path:= file, new_directory:= 'img/',  2 )
+        up.upscale_image(input_path:= file, output_path:= newfilename, scale_factor:=2)
 
-    # Calculate the new dimensions
-    new_width = int(image.shape[1] * scale_factor)
-    new_height = int(image.shape[0] * scale_factor)
-    new_dimensions = (new_width, new_height)
 
-    # Resize the image
-    upscaled_image = cv2.resize(image, new_dimensions, interpolation=interpolation)
+root = TkinterDnD.Tk()
+root.title("UpscalerAI - by Agustin Gonzalez")
+root.minsize(400,300)
+root.maxsize(1600,1080)
+root.iconbitmap('icons/scale.png')
 
-    # Save the upscaled image
-    cv2.imwrite(output_path, upscaled_image)
+screen_width = root.winfo_screenwidth()
+screen_height = root.winfo_screenheight()
+x = int((screen_width / 2) - (800 / 2))
+y = int((screen_height / 2) - (600 / 2))
+root.geometry(f"800x600+{x}+{y}")
 
-    print(f"Image upscaled and saved as {output_path}")
+label = tk.Label(root, text="Drag and drop image files here")
+label.pack(fill=tk.BOTH, expand=True)
 
-# Example usage
-upscale_image("img/vangogh.png", "img/upscaled_vangoghx4.png", scale_factor=4.0)
+label.drop_target_register(DND_FILES)
+label.dnd_bind('<<Drop>>', drop)
+
+root.mainloop()
