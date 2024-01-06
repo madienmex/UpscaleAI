@@ -1,6 +1,23 @@
+import os, sys
 import tkinter as tk
 import upscale as up
 import tools as t
+
+#update path attributes
+if getattr(sys, 'frozen', False):
+    # If the application is bundled with PyInstaller
+    application_path = sys._MEIPASS  # This is the path to the extracted temporary folder
+    lib_path = os.path.join(application_path, 'lib', 'tkdnd')
+    os.environ['TKDND_LIBRARY'] = lib_path
+    lib_path = os.path.join(application_path, 'lib', 'tkinterdnd2')
+    os.environ['TKINTERDND2_LIBRARY'] = lib_path
+    #lib_path = os.path.join(application_path, 'lib')
+    #os.environ['PATH'] = lib_path + os.pathsep + os.environ['PATH']
+
+else:
+    application_path = os.path.dirname(os.path.abspath(__file__))
+    # You can set a default path for development here if needed
+
 from tkinterdnd2 import DND_FILES, TkinterDnD
 
 def drop(event):
